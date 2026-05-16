@@ -14,8 +14,12 @@
     name: python3-PyMySQL
     state: present
 
-- name: setp root password
-  ansible.builtin.command: mysql_secure_installation --set-root-pass {{ mysql_root_password }}
+- name: Set MySQL root password
+  ansible.builtin.shell: |
+    mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  register: mysql_password_reset
+  failed_when: false
+  changed_when: "'ERROR' not in mysql_password_reset.stderr"
 
 - name: Allow remote MySQL connections
   ansible.builtin.replace:
