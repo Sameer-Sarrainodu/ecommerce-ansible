@@ -1,0 +1,6 @@
+[rabbitmq-server]
+name=RabbitMQ Repository
+baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/9/$basearch
+repo_gpgcheck=0
+gpgcheck=0
+enabled=1

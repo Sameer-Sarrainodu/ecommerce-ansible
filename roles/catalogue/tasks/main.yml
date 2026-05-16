@@ -1,0 +1,45 @@
+- name: Setup application directories
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: app-setup
+
+- name: Install NodeJS runtime
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nodejs-setup
+
+- name: Install NodeJS dependencies
+  ansible.builtin.command:
+    cmd: npm install
+    chdir: "{{ app_home }}"
+
+- name: Copy MongoDB client repository
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+    mode: '0644'
+
+- name: Install MongoDB shell client
+  ansible.builtin.dnf:
+    name: mongodb-mongosh
+    state: present
+
+- name: Check if catalogue schema already loaded
+  ansible.builtin.command:
+    cmd: >
+      mongosh --host mongodb.roboshop.internal
+      --quiet
+      --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+  register: mongo_schema_check
+  changed_when: false
+
+- name: Load catalogue schema
+  ansible.builtin.shell: >
+    mongosh --host mongodb.roboshop.internal
+    < {{ app_home }}/db/{{ schema_file }}
+  when: mongo_schema_check.stdout | int < 0
+
+- name: Configure systemd service
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: systemd-setup

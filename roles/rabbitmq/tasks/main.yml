@@ -1,0 +1,32 @@
+- name: Install Erlang
+  ansible.builtin.dnf:
+    name: erlang
+    state: present
+
+- name: Copy RabbitMQ repository file
+  ansible.builtin.copy:
+    src: rabbitmq.repo
+    dest: /etc/yum.repos.d/rabbitmq.repo
+    mode: '0644'
+
+- name: Install RabbitMQ server
+  ansible.builtin.dnf:
+    name: "{{ rabbitmq_package }}"
+    state: present
+
+- name: Enable RabbitMQ service
+  ansible.builtin.service:
+    name: "{{ rabbitmq_service }}"
+    enabled: true
+    state: started
+
+- name: Create RabbitMQ application user
+  community.rabbitmq.rabbitmq_user:
+    user: "{{ rabbitmq_user }}"
+    password: "{{ rabbitmq_password }}"
+    permissions:
+      - vhost: /
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+    state: present

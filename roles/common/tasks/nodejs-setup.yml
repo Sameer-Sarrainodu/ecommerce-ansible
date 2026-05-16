@@ -1,0 +1,33 @@
+- name: Disable old NodeJS module
+  ansible.builtin.command:
+    cmd: dnf module disable nodejs -y
+  ignore_errors: true
+
+- name: Enable NodeJS 20 module
+  ansible.builtin.command:
+    cmd: dnf module enable nodejs:{{ nodejs_version }} -y
+
+- name: Install NodeJS
+  ansible.builtin.dnf:
+    name: nodejs
+    state: present
+
+- name: Verify NodeJS installation
+  ansible.builtin.command:
+    cmd: node -v
+  register: node_version
+  changed_when: false
+
+- name: Verify npm installation
+  ansible.builtin.command:
+    cmd: npm -v
+  register: npm_version
+  changed_when: false
+
+- name: Print NodeJS version
+  ansible.builtin.debug:
+    msg: "{{ node_version.stdout }}"
+
+- name: Print npm version
+  ansible.builtin.debug:
+    msg: "{{ npm_version.stdout }}"

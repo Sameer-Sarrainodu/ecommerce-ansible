@@ -1,0 +1,7 @@
+mongodb_package: mongodb-org
+
+mongodb_service: mongod
+
+mongodb_port: 27017
+
+mongodb_bind_ip: 0.0.0.0

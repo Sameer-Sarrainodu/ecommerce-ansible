@@ -1,0 +1,13 @@
+[Unit]
+Description=User Service
+
+[Service]
+User={{ app_user }}
+Environment=MONGO=true
+Environment=REDIS_HOST=redis.roboshop.internal
+Environment=MONGO_URL="mongodb://mongodb.roboshop.internal:27017/users"
+ExecStart=/bin/node /app/server.js
+SyslogIdentifier=user
+
+[Install]
+WantedBy=multi-user.target

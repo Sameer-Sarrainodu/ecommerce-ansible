@@ -1,0 +1,9 @@
+component: frontend
+
+nginx_package: nginx
+
+nginx_service: nginx
+
+frontend_root: /usr/share/nginx/html
+
+frontend_port: 80

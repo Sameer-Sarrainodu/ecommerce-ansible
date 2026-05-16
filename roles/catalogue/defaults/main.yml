@@ -1,0 +1,5 @@
+component: catalogue
+
+service_port: 8080
+
+schema_file: master-data.js

@@ -1,0 +1,40 @@
+- name: Install Nginx
+  ansible.builtin.dnf:
+    name: "{{ nginx_package }}"
+    state: present
+
+- name: Remove default frontend content
+  ansible.builtin.file:
+    path: "{{ frontend_root }}"
+    state: absent
+
+- name: Create frontend root directory
+  ansible.builtin.file:
+    path: "{{ frontend_root }}"
+    state: directory
+    mode: '0755'
+
+- name: Download frontend artifact
+  ansible.builtin.get_url:
+    url: "{{ artifact_url }}/{{ component }}-v3.zip"
+    dest: "/tmp/{{ component }}.zip"
+    mode: '0644'
+
+- name: Extract frontend artifact
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ component }}.zip"
+    dest: "{{ frontend_root }}"
+    remote_src: yes
+
+- name: Copy Nginx configuration
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/default.d/roboshop.conf
+    mode: '0644'
+  notify: restart nginx
+
+- name: Enable Nginx service
+  ansible.builtin.service:
+    name: "{{ nginx_service }}"
+    enabled: true
+    state: started

@@ -1,0 +1,19 @@
+- name: Setup application directories
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: app-setup
+
+- name: Install NodeJS runtime
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nodejs-setup
+
+- name: Install NodeJS dependencies
+  ansible.builtin.command:
+    cmd: npm install
+    chdir: "{{ app_home }}"
+
+- name: Configure systemd service
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: systemd-setup

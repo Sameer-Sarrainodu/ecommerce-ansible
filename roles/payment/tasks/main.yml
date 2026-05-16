@@ -1,0 +1,14 @@
+- name: Setup application directories
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: app-setup
+
+- name: Install Python runtime
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: python-setup
+
+- name: Configure systemd service
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: systemd-setup

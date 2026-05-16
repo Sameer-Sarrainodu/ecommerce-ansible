@@ -1,0 +1,3 @@
+component: payment
+
+service_port: 8080

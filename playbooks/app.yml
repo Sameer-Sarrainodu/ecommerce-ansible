@@ -1,0 +1,10 @@
+- name: Configure Application Services
+  hosts: app
+
+  roles:
+    - catalogue
+    - user
+    - cart
+    - shipping
+    - payment
+    - dispatch

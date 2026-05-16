@@ -1,0 +1,18 @@
+- name: Install Python 3 and pip
+  ansible.builtin.dnf:
+    name: "{{ python_package }}"
+    state: present
+
+- name: Install Python dependencies
+  ansible.builtin.pip:
+    requirements: "{{ app_home }}/requirements.txt"
+
+- name: Verify Python installation
+  ansible.builtin.command:
+    cmd: python3 --version
+  register: python_version_output
+  changed_when: false
+
+- name: Print Python version
+  ansible.builtin.debug:
+    msg: "{{ python_version_output.stdout }}"

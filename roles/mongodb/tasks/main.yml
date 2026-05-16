@@ -1,0 +1,23 @@
+- name: Copy MongoDB repository file
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+    mode: '0644'
+
+- name: Install MongoDB
+  ansible.builtin.dnf:
+    name: "{{ mongodb_package }}"
+    state: present
+
+- name: Update MongoDB listen address
+  ansible.builtin.replace:
+    path: "{{ mongodb_config_path }}"
+    regexp: '127.0.0.1'
+    replace: "{{ mongodb_bind_ip }}"
+  notify: restart mongodb
+
+- name: Enable MongoDB service
+  ansible.builtin.service:
+    name: "{{ mongod_service }}"
+    enabled: true
+    state: started

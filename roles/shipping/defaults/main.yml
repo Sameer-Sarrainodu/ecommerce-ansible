@@ -1,0 +1,7 @@
+component: shipping
+
+service_port: 8080
+
+schema_file: schema.sql
+
+app_jar: shipping.jar

@@ -1,0 +1,42 @@
+- name: Setup application directories
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: app-setup
+
+- name: Install Java runtime
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: java-setup
+
+- name: Install Maven and build package
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: maven-setup
+
+- name: Install MySQL client
+  ansible.builtin.dnf:
+    name: mysql
+    state: present
+
+- name: Check if cities schema already loaded
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    -e "use cities"
+  register: mysql_schema_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Load MySQL schema
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    < {{ app_home }}/db/{{ schema_file }}
+  when: mysql_schema_check.rc != 0
+
+- name: Configure systemd service
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: systemd-setup

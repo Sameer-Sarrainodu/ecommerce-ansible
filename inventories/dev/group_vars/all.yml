@@ -1,0 +1,6 @@
+env: dev
+domain_name: roboshop.internal
+app_user: roboshop
+app_home: /app
+
+artifact_url: https://roboshop-artifacts.s3.amazonaws.com

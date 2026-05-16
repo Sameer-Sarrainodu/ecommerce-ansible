@@ -1,0 +1,50 @@
+pipeline {
+
+    agent any
+
+    environment {
+        ANSIBLE_HOST_KEY_CHECKING = "False"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/Samee-Sarrainodu/ecommerce-ansible.git'
+            }
+        }
+
+        stage('Verify Ansible') {
+            steps {
+                sh 'ansible --version'
+            }
+        }
+
+        stage('Install Collections') {
+            steps {
+                sh 'ansible-galaxy collection install -r collections/requirements.yml'
+            }
+        }
+
+        stage('Deploy Ecommerce Application') {
+            steps {
+                sh '''
+                    chmod +x jenkins/deploy.sh
+                    ./jenkins/deploy.sh
+                '''
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo '✅ Deployment completed successfully!'
+        }
+
+        failure {
+            echo '❌ Deployment failed!'
+        }
+    }
+}
