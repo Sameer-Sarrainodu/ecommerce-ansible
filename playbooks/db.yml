@@ -1,6 +1,11 @@
-- name: Configure Database Servers
-  hosts: db
+- name: Configure MongoDB
+  hosts: mongodb
 
   roles:
     - mongodb
+
+- name: Configure MySQL
+  hosts: mysql
+
+  roles:
     - mysql

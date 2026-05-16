@@ -1,6 +1,11 @@
-- name: Configure Middleware Servers
-  hosts: middleware
+- name: Configure Redis
+  hosts: redis
 
   roles:
     - redis
+
+- name: Configure RabbitMQ
+  hosts: rabbitmq
+
+  roles:
     - rabbitmq

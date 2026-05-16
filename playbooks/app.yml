@@ -1,10 +1,35 @@
-- name: Configure Application Services
-  hosts: app
+- name: Configure Catalogue Service
+  hosts: catalogue
 
   roles:
     - catalogue
+
+- name: Configure User Service
+  hosts: user
+
+  roles:
     - user
+
+- name: Configure Cart Service
+  hosts: cart
+
+  roles:
     - cart
+
+- name: Configure Shipping Service
+  hosts: shipping
+
+  roles:
     - shipping
+
+- name: Configure Payment Service
+  hosts: payment
+
+  roles:
     - payment
+
+- name: Configure Dispatch Service
+  hosts: dispatch
+
+  roles:
     - dispatch
