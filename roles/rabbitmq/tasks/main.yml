@@ -1,8 +1,3 @@
-- name: Install Erlang
-  ansible.builtin.dnf:
-    name: erlang
-    state: present
-
 - name: Copy RabbitMQ repository file
   ansible.builtin.copy:
     src: rabbitmq.repo
