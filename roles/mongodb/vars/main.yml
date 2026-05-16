@@ -1,1 +1,1 @@
-mongodb_config_file: /etc/mongod.conf
+mongodb_config_path: /etc/mongod.conf
