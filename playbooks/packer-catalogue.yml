@@ -1,0 +1,7 @@
+- name: Build Catalogue Image
+  hosts: all
+
+  become: true
+
+  roles:
+    - catalogue

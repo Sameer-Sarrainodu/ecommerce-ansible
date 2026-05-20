@@ -1,0 +1,7 @@
+- name: Build Shipping Image
+  hosts: all
+
+  become: true
+
+  roles:
+    - shipping

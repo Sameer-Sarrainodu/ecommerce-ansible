@@ -1,0 +1,7 @@
+- name: Build Frontend Image
+  hosts: all
+
+  become: true
+
+  roles:
+    - frontend

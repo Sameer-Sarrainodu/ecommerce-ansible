@@ -1,0 +1,7 @@
+- name: Build Cart Image
+  hosts: all
+
+  become: true
+
+  roles:
+    - cart
