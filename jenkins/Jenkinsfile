@@ -67,10 +67,10 @@ pipeline {
 
                         /usr/bin/packer init .
 
-                        // /usr/bin/packer build -force \
-                        // -only=azure-arm.catalogue \
-                        // -var-file=variables.pkrvars.hcl \
-                        // .
+                        # /usr/bin/packer build -force \
+                        # -only=azure-arm.catalogue \
+                        # -var-file=variables.pkrvars.hcl \
+                        # .
 
                         /usr/bin/packer build -force \
                         -only=azure-arm.user \
