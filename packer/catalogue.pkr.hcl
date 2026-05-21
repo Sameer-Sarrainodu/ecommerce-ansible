@@ -37,7 +37,8 @@ build {
   provisioner "shell" {
 
     inline = [
-      "sudo dnf install -y openssh-server"
+      "sudo dnf install -y openssh-server",
+      "sudo ln -s /usr/libexec/openssh/sftp-server /usr/lib/sftp-server || true"
     ]
   }
 
