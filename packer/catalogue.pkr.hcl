@@ -39,8 +39,8 @@ build {
 
   playbook_file = "../playbooks/packer-catalogue.yml"
 
-  extra_arguments = [
-    "--roles-path=../roles"
+  ansible_env_vars = [
+    "ANSIBLE_ROLES_PATH=../roles"
   ]
 }
 }

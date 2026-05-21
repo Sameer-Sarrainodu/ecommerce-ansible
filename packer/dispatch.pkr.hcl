@@ -40,8 +40,8 @@ build {
 
     playbook_file = "../playbooks/packer-dispatch.yml"
 
-  extra_arguments = [
-    "--roles-path=../roles"
+  ansible_env_vars = [
+    "ANSIBLE_ROLES_PATH=../roles"
   ]
   }
 }
