@@ -60,13 +60,13 @@ pipeline {
                 dir('packer') {
 
                     sh '''
-                        packer build -var-file=variables.pkr.hcl catalogue.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl user.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl cart.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl shipping.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl payment.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl dispatch.pkr.hcl
-                        packer build -var-file=variables.pkr.hcl frontend.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl catalogue.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl user.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl cart.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl shipping.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl payment.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl dispatch.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl frontend.pkr.hcl
                     '''
                 }
             }
