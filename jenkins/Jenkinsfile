@@ -3,32 +3,37 @@ pipeline {
     agent any
 
     environment {
+
         ANSIBLE_HOST_KEY_CHECKING = "False"
+
+        ANSIBLE_CONFIG = "${WORKSPACE}/ansible.cfg"
+
+        PACKER_LOG = "1"
     }
 
     stages {
 
         stage('Checkout Code') {
+
             steps {
+
                 git branch: 'main',
                 url: 'https://github.com/Sameer-Sarrainodu/ecommerce-ansible.git'
             }
         }
 
         stage('Verify Ansible') {
+
             steps {
+
                 sh 'ansible --version'
             }
         }
 
-        stage('Install Collections') {
-            steps {
-                sh 'ansible-galaxy collection install -r collections/requirements.yml'
-            }
-        }
+        stage('Deploy Infrastructure Components') {
 
-        stage('Deploy Ecommerce Application') {
             steps {
+
                 sh '''
                     chmod +x jenkins/deploy.sh
                     ./jenkins/deploy.sh
@@ -40,11 +45,13 @@ pipeline {
     post {
 
         success {
-            echo '✅ Deployment completed successfully!'
+
+            echo '✅ DB deployment and Catalogue image build completed successfully!'
         }
 
         failure {
-            echo '❌ Deployment failed!'
+
+            echo '❌ Pipeline failed!'
         }
     }
 }
