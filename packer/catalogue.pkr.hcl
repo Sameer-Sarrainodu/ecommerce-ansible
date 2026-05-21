@@ -37,7 +37,7 @@ build {
   provisioner "shell" {
 
     inline = [
-      "sudo dnf install -y openssh-server",
+      "sudo dnf install -y openssh-server python3",
       "sudo ln -s /usr/libexec/openssh/sftp-server /usr/lib/sftp-server || true",
       "mkdir -p /tmp/.ansible",
       "chmod 777 /tmp/.ansible"
@@ -48,9 +48,15 @@ build {
 
     playbook_file = "../playbooks/packer-catalogue.yml"
 
+    user = "ec2-user"
+
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=../roles",
       "ANSIBLE_REMOTE_TEMP=/tmp/.ansible"
+    ]
+
+    extra_arguments = [
+      "-e", "ansible_python_interpreter=/usr/bin/python3"
     ]
   }
 }
