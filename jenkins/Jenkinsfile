@@ -53,24 +53,53 @@ pipeline {
             }
         }
 
-        stage('Build Service Images') {
+stage('Build Service Images') {
 
-            steps {
+    steps {
 
-                dir('packer') {
+        dir('packer') {
 
-                    sh '''
-                        packer build -var-file=variables.pkrvars.hcl catalogue.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl user.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl cart.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl shipping.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl payment.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl dispatch.pkr.hcl
-                        packer build -var-file=variables.pkrvars.hcl frontend.pkr.hcl
-                    '''
-                }
-            }
+            sh '''
+                packer init .
+
+                packer build \
+                  -only=azure-arm.catalogue \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.user \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.cart \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.shipping \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.payment \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.dispatch \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+
+                packer build \
+                  -only=azure-arm.frontend \
+                  -var-file=variables.pkrvars.hcl \
+                  .
+            '''
         }
+    }
+}
     }
 
     post {

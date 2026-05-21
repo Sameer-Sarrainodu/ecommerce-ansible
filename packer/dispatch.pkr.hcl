@@ -39,5 +39,9 @@ build {
   provisioner "ansible" {
 
     playbook_file = "../playbooks/packer-dispatch.yml"
+
+  extra_arguments = [
+    "--roles-path=../roles"
+  ]
   }
 }

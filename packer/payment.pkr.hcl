@@ -39,5 +39,9 @@ build {
   provisioner "ansible" {
 
     playbook_file = "../playbooks/packer-payment.yml"
+
+  extra_arguments = [
+    "--roles-path=../roles"
+  ]
   }
 }
