@@ -30,17 +30,17 @@ pipeline {
             }
         }
 
-        stage('Deploy DB and Middleware') {
+        // stage('Deploy DB and Middleware') {
 
-            steps {
+        //     steps {
 
-                sh '''
-                    ansible-playbook \
-                      -i inventories/dev/hosts.ini \
-                      playbooks/site.yml
-                '''
-            }
-        }
+        //         sh '''
+        //             ansible-playbook \
+        //               -i inventories/dev/hosts.ini \
+        //               playbooks/site.yml
+        //         '''
+        //     }
+        // }
 
         stage('Packer Init') {
 
