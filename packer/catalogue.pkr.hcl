@@ -34,15 +34,16 @@ build {
   sources = [
     "source.azure-arm.catalogue"
   ]
-  provisioner "shell" {
+provisioner "shell" {
 
-    inline = [
-      "sudo dnf install -y openssh-server python3",
-      "sudo ln -s /usr/libexec/openssh/sftp-server /usr/lib/sftp-server || true",
-      "mkdir -p /tmp/.ansible",
-      "chmod 777 /tmp/.ansible"
-    ]
-  }
+  inline = [
+    "sudo dnf install -y openssh-server python3",
+    "sudo sed -i 's|Subsystem.*sftp.*|Subsystem sftp /usr/libexec/openssh/sftp-server|' /etc/ssh/sshd_config",
+    "sudo systemctl restart sshd",
+    "mkdir -p /tmp/.ansible",
+    "chmod 777 /tmp/.ansible"
+  ]
+}
 
   provisioner "ansible" {
 
