@@ -1,0 +1,62 @@
+- name: Cleanup MongoDB
+  hosts: mongodb
+
+  become: true
+
+  tasks:
+
+    - name: Remove MongoDB packages
+      ansible.builtin.dnf:
+        name: mongodb-org*
+        state: absent
+
+    - name: Remove MongoDB data
+      ansible.builtin.file:
+        path: /var/lib/mongo
+        state: absent
+
+- name: Cleanup MySQL
+  hosts: mysql
+
+  become: true
+
+  tasks:
+
+    - name: Remove MySQL packages
+      ansible.builtin.dnf:
+        name: mysql-community-server
+        state: absent
+
+    - name: Remove MySQL data
+      ansible.builtin.file:
+        path: /var/lib/mysql
+        state: absent
+
+- name: Cleanup Redis
+  hosts: redis
+
+  become: true
+
+  tasks:
+
+    - name: Remove Redis packages
+      ansible.builtin.dnf:
+        name: redis
+        state: absent
+
+- name: Cleanup RabbitMQ
+  hosts: rabbitmq
+
+  become: true
+
+  tasks:
+
+    - name: Remove RabbitMQ packages
+      ansible.builtin.dnf:
+        name: rabbitmq-server
+        state: absent
+
+    - name: Remove Erlang packages
+      ansible.builtin.dnf:
+        name: erlang*
+        state: absent

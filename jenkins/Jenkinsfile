@@ -30,13 +30,25 @@ pipeline {
             }
         }
 
-        stage('Deploy Infrastructure Components') {
+        // stage('Deploy Infrastructure Components') {
+
+        //     steps {
+
+        //         sh '''
+        //             chmod +x jenkins/deploy.sh
+        //             ./jenkins/deploy.sh
+        //         '''
+        //     }
+        // }
+
+        stage('Cleanup Old Installations') {
 
             steps {
 
                 sh '''
-                    chmod +x jenkins/deploy.sh
-                    ./jenkins/deploy.sh
+                    ansible-playbook \
+                    -i inventories/dev/hosts.ini \
+                    playbooks/cleanup.yml
                 '''
             }
         }
