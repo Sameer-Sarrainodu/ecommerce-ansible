@@ -30,26 +30,45 @@ pipeline {
             }
         }
 
-        // stage('Deploy Infrastructure Components') {
-
-        //     steps {
-
-        //         sh '''
-        //             chmod +x jenkins/deploy.sh
-        //             ./jenkins/deploy.sh
-        //         '''
-        //     }
-        // }
-
-        stage('Cleanup Old Installations') {
+        stage('Deploy DB and Middleware') {
 
             steps {
 
                 sh '''
                     ansible-playbook \
-                    -i inventories/dev/hosts.ini \
-                    playbooks/cleanup.yml
+                      -i inventories/dev/hosts.ini \
+                      playbooks/site.yml
                 '''
+            }
+        }
+
+        stage('Packer Init') {
+
+            steps {
+
+                dir('packer') {
+
+                    sh 'packer init .'
+                }
+            }
+        }
+
+        stage('Build Service Images') {
+
+            steps {
+
+                dir('packer') {
+
+                    sh '''
+                        packer build -var-file=variables.pkrvars.hcl catalogue.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl user.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl cart.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl shipping.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl payment.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl dispatch.pkr.hcl
+                        packer build -var-file=variables.pkrvars.hcl frontend.pkr.hcl
+                    '''
+                }
             }
         }
     }
@@ -58,7 +77,7 @@ pipeline {
 
         success {
 
-            echo '✅ DB deployment and Catalogue image build completed successfully!'
+            echo '✅ All service images built successfully!'
         }
 
         failure {
