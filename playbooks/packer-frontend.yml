@@ -1,5 +1,8 @@
-- name: Build Frontend Image
-  hosts: all
+- name: Build frontend Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 

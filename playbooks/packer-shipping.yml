@@ -1,5 +1,8 @@
-- name: Build Shipping Image
-  hosts: all
+- name: Build shipping Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 

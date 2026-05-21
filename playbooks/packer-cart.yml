@@ -1,7 +1,11 @@
-- name: Build Cart Image
-  hosts: all
+- name: Build cart Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 
   roles:
     - cart
+

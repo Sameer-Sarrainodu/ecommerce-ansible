@@ -1,5 +1,8 @@
-- name: Build User Image
-  hosts: all
+- name: Build user Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 

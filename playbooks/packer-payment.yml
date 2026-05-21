@@ -1,7 +1,10 @@
-- name: Build Shipping Image
-  hosts: all
+- name: Build payment Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 
   roles:
-    - shipping
+    - payment

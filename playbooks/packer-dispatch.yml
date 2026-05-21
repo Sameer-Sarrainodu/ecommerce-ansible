@@ -1,5 +1,8 @@
-- name: Build Dispatch Image
-  hosts: all
+- name: Build dispatch Image
+
+  hosts: localhost
+
+  connection: local
 
   become: true
 
