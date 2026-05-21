@@ -38,16 +38,19 @@ build {
 
     inline = [
       "sudo dnf install -y openssh-server",
-      "sudo ln -s /usr/libexec/openssh/sftp-server /usr/lib/sftp-server || true"
+      "sudo ln -s /usr/libexec/openssh/sftp-server /usr/lib/sftp-server || true",
+      "mkdir -p /tmp/.ansible",
+      "chmod 777 /tmp/.ansible"
     ]
   }
 
   provisioner "ansible" {
 
-  playbook_file = "../playbooks/packer-catalogue.yml"
+    playbook_file = "../playbooks/packer-catalogue.yml"
 
-  ansible_env_vars = [
-    "ANSIBLE_ROLES_PATH=../roles"
-  ]
-}
+    ansible_env_vars = [
+      "ANSIBLE_ROLES_PATH=../roles",
+      "ANSIBLE_REMOTE_TEMP=/tmp/.ansible"
+    ]
+  }
 }
