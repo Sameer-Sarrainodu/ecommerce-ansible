@@ -1,72 +1,57 @@
 source "azure-arm" "catalogue" {
-  subscription_id                 = var.subscription_id
-  client_id                       = var.client_id
-  client_secret                   = var.client_secret
-  tenant_id                       = var.tenant_id
-
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
   managed_image_resource_group_name = var.resource_group_name
-  managed_image_name              = "catalogue-image"
-
-  os_type                         = "Linux"
-  image_publisher                 = "RedHat"
-  image_offer                     = "RHEL"
-  image_sku                       = "9-lvm-gen2"
-  location                        = var.location
-  vm_size                         = "Standard_D2s_v3"
-
+  managed_image_name = "catalogue-image"
+  os_type         = "Linux"
+  image_publisher = "RedHat"
+  image_offer     = "RHEL"
+  image_sku       = "9-lvm-gen2"
+  location = var.location
+  vm_size = "Standard_D2s_v3"
   azure_tags = {
     Environment = "dev"
     Project     = "roboshop"
   }
-
-  communicator                    = "ssh"
-  ssh_username                    = "ec2user" 
-  ssh_timeout                     = "10m"
+  communicator = "ssh"
+  ssh_username = "ec2-user"
 }
 
 build {
-  sources = ["source.azure-arm.catalogue"]
+  sources = [
+    "source.azure-arm.catalogue"
+  ]
 
-  # =============================================
-  # First Provisioner: System Preparation
-  # =============================================
   provisioner "shell" {
     inline = [
-      "echo '=== Updating and Installing Required Packages ==='",
-      "sudo dnf install -y openssh-server openssh-clients python3",
-
-      "echo '=== Enabling and Starting SSHD ==='",
-      "sudo systemctl enable --now sshd",
-
-      "echo '=== Fixing SFTP Subsystem for RHEL 9 (Long-term Fix) ==='",
-      "sudo sed -i 's|^Subsystem sftp.*|Subsystem sftp internal-sftp|' /etc/ssh/sshd_config",
-
-      "echo '=== Restarting SSHD ==='",
+      "sudo dnf install -y openssh-server python3 openssh-clients",
+      "# Fix the SFTP subsystem path for RHEL 9",
+      "sudo sed -i 's|^Subsystem.*sftp.*|Subsystem sftp /usr/libexec/openssh/sftp-server|' /etc/ssh/sshd_config",
+      "# If the new config exists, use it",
+      "if [ -f /etc/ssh/sshd_config.rpmnew ]; then sudo mv /etc/ssh/sshd_config.rpmnew /etc/ssh/sshd_config; fi",
+      "# Ensure the correct SFTP path is set",
+      "sudo sed -i 's|^Subsystem.*sftp.*|Subsystem sftp /usr/libexec/openssh/sftp-server|' /etc/ssh/sshd_config",
+      "# Restart SSH to apply changes",
       "sudo systemctl restart sshd",
-
-      "echo '=== Creating Ansible Temp Directory ==='",
-      "sudo mkdir -p /tmp/.ansible",
-      "sudo chmod 777 /tmp/.ansible"
+      "# Verify the configuration",
+      "grep 'Subsystem.*sftp' /etc/ssh/sshd_config",
+      "mkdir -p /tmp/.ansible",
+      "chmod 777 /tmp/.ansible"
     ]
-    execute_command = "sudo -E bash -c '{{ .Path }}'"
   }
 
-  # =============================================
-  # Ansible Provisioner
-  # =============================================
   provisioner "ansible" {
     playbook_file = "../playbooks/packer-catalogue.yml"
-    user          = "azureuser"
-
+    user = "ec2-user"
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=../roles",
       "ANSIBLE_REMOTE_TEMP=/tmp/.ansible"
     ]
-
     extra_arguments = [
       "-e", "ansible_python_interpreter=/usr/bin/python3",
-      "-e", "ansible_ssh_transfer_method=smart",     # Best option
-      "--scp-extra-args", "-O"                       # Helps with newer OpenSSH
+      "-e", "ansible_ssh_transfer_method=scp"
     ]
   }
 }
