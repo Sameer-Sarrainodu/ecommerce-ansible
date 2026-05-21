@@ -36,6 +36,13 @@ build {
     "source.azure-arm.shipping"
   ]
 
+  provisioner "shell" {
+
+    inline = [
+      "sudo dnf install -y openssh-server"
+    ]
+  }
+
   provisioner "ansible" {
 
     playbook_file = "../playbooks/packer-shipping.yml"

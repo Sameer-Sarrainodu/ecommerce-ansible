@@ -34,6 +34,12 @@ build {
   sources = [
     "source.azure-arm.catalogue"
   ]
+  provisioner "shell" {
+
+    inline = [
+      "sudo dnf install -y openssh-server"
+    ]
+  }
 
   provisioner "ansible" {
 

@@ -36,6 +36,13 @@ build {
     "source.azure-arm.frontend"
   ]
 
+  provisioner "shell" {
+
+    inline = [
+      "sudo dnf install -y openssh-server"
+    ]
+  }
+
   provisioner "ansible" {
 
     playbook_file = "../playbooks/packer-frontend.yml"
