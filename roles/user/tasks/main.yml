@@ -32,12 +32,15 @@
       --eval 'db.getMongo().getDBNames().indexOf("users")'
   register: mongo_schema_check
   changed_when: false
+  when: not packer_build | default(false)
 
 - name: Load user schema
   ansible.builtin.shell: >
     mongosh --host mongodb.roboshop.internal
     < {{ app_home }}/db/{{ schema_file }}
-  when: mongo_schema_check.stdout | int < 0
+  when:
+    - not packer_build | default(false)
+    - mongo_schema_check.stdout | int < 0
 
 - name: Configure systemd service
   ansible.builtin.include_role:

@@ -27,6 +27,7 @@
   register: mysql_schema_check
   ignore_errors: true
   changed_when: false
+  when: not packer_build | default(false)
 
 - name: Load MySQL schema
   ansible.builtin.shell: >
@@ -34,7 +35,9 @@
     -uroot
     -p{{ mysql_root_password }}
     < {{ app_home }}/db/{{ schema_file }}
-  when: mysql_schema_check.rc != 0
+  when:
+    - not packer_build | default(false)
+    - mysql_schema_check.rc != 0
 
 - name: Configure systemd service
   ansible.builtin.include_role:

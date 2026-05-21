@@ -45,11 +45,13 @@ build {
 
       "cd /tmp",
 
+      "rm -rf ecommerce-ansible",
+
       "git clone https://github.com/Sameer-Sarrainodu/ecommerce-ansible.git",
 
       "cd /tmp/ecommerce-ansible",
 
-      "ansible-playbook playbooks/packer-catalogue.yml"
+      "ansible-playbook -e packer_build=true playbooks/packer-catalogue.yml"
     ]
   }
 }
