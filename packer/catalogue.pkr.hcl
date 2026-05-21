@@ -1,64 +1,49 @@
 source "azure-arm" "catalogue" {
-
   subscription_id = var.subscription_id
-
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
-
   managed_image_resource_group_name = var.resource_group_name
-
   managed_image_name = "catalogue-image"
-
   os_type         = "Linux"
   image_publisher = "RedHat"
   image_offer     = "RHEL"
   image_sku       = "9-lvm-gen2"
-
   location = var.location
-
   vm_size = "Standard_D2s_v3"
-
   azure_tags = {
     Environment = "dev"
     Project     = "roboshop"
   }
-
   communicator = "ssh"
-
   ssh_username = "ec2-user"
 }
 
 build {
-
   sources = [
     "source.azure-arm.catalogue"
   ]
-provisioner "shell" {
 
-  inline = [
-    "sudo dnf install -y openssh-server python3",
-    "sudo sed -i 's|Subsystem.*sftp.*|Subsystem sftp /usr/libexec/openssh/sftp-server|' /etc/ssh/sshd_config",
-    "sudo systemctl restart sshd",
-    "mkdir -p /tmp/.ansible",
-    "chmod 777 /tmp/.ansible"
-  ]
-}
+  provisioner "shell" {
+    inline = [
+      "sudo dnf install -y openssh-server python3 openssh-clients",
+      "sudo systemctl enable sshd",
+      "sudo systemctl start sshd",
+      "mkdir -p /tmp/.ansible",
+      "chmod 777 /tmp/.ansible"
+    ]
+  }
 
   provisioner "ansible" {
-
     playbook_file = "../playbooks/packer-catalogue.yml"
-
     user = "ec2-user"
-
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=../roles",
       "ANSIBLE_REMOTE_TEMP=/tmp/.ansible"
     ]
-
     extra_arguments = [
       "-e", "ansible_python_interpreter=/usr/bin/python3",
-      "-e", "ansible_ssh_transfer_method=sftp"
+      "-e", "ansible_ssh_transfer_method=scp"
     ]
   }
 }
