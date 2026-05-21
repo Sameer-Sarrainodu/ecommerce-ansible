@@ -39,16 +39,20 @@ build {
   provisioner "shell" {
 
     inline = [
-      "sudo dnf install -y openssh-server"
+
+      "sudo dnf install -y git python3 python3-pip",
+
+      "pip3 install ansible",
+
+      "cd /tmp",
+
+      "rm -rf ecommerce-ansible",
+
+      "git clone https://github.com/Sameer-Sarrainodu/ecommerce-ansible.git",
+
+      "cd /tmp/ecommerce-ansible",
+
+      "ansible-playbook -e packer_build=true playbooks/packer-cart.yml"
     ]
-  }
-
-  provisioner "ansible" {
-
-    playbook_file = "../playbooks/packer-cart.yml"
-
-  ansible_env_vars = [
-    "ANSIBLE_ROLES_PATH=../roles"
-  ]
   }
 }

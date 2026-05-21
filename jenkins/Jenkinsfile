@@ -53,53 +53,28 @@ pipeline {
             }
         }
 
-stage('Build Service Images') {
+        stage('Build Service Images') {
 
-    steps {
+            steps {
 
-        dir('packer') {
+                dir('packer') {
 
-            sh '''
-                packer init .
+                    sh '''
 
-                packer build \
-                  -only=azure-arm.catalogue \
-                  -var-file=variables.pkrvars.hcl \
-                  .
+                        set -euxo pipefail
 
-                packer build \
-                  -only=azure-arm.user \
-                  -var-file=variables.pkrvars.hcl \
-                  .
+                        ls -l
 
-                packer build \
-                  -only=azure-arm.cart \
-                  -var-file=variables.pkrvars.hcl \
-                  .
+                        /usr/bin/packer init .
 
-                packer build \
-                  -only=azure-arm.shipping \
-                  -var-file=variables.pkrvars.hcl \
-                  .
-
-                packer build \
-                  -only=azure-arm.payment \
-                  -var-file=variables.pkrvars.hcl \
-                  .
-
-                packer build \
-                  -only=azure-arm.dispatch \
-                  -var-file=variables.pkrvars.hcl \
-                  .
-
-                packer build \
-                  -only=azure-arm.frontend \
-                  -var-file=variables.pkrvars.hcl \
-                  .
-            '''
+                        /usr/bin/packer build \
+                        -only=azure-arm.catalogue \
+                        -var-file=variables.pkrvars.hcl \
+                        .
+                    '''
+                }
+            }
         }
-    }
-}
     }
 
     post {
