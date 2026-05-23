@@ -30,28 +30,28 @@ pipeline {
             }
         }
 
-        // stage('Deploy DB and Middleware') {
-
-        //     steps {
-
-        //         sh '''
-        //             ansible-playbook \
-        //               -i inventories/dev/hosts.ini \
-        //               playbooks/site.yml
-        //         '''
-        //     }
-        // }
-
-        stage('Packer Init') {
+        stage('Deploy DB and Middleware') {
 
             steps {
 
-                dir('packer') {
-
-                    sh 'packer init .'
-                }
+                sh '''
+                    ansible-playbook \
+                      -i inventories/dev/hosts.ini \
+                      playbooks/site.yml
+                '''
             }
         }
+
+        // stage('Packer Init') {
+
+        //     steps {
+
+        //         dir('packer') {
+
+        //             sh 'packer init .'
+        //         }
+        //     }
+        // }
 
         stage('Build Service Images') {
 
@@ -97,10 +97,10 @@ pipeline {
                         # -var-file=variables.pkrvars.hcl \
                         # .
 
-                         /usr/bin/packer build -force \
-                         -only=azure-arm.frontend \
-                         -var-file=variables.pkrvars.hcl \
-                        .
+                         # /usr/bin/packer build -force \
+                         # -only=azure-arm.frontend \
+                         # -var-file=variables.pkrvars.hcl \
+                        # .
                     '''
                 }
             }
