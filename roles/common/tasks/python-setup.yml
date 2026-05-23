@@ -1,3 +1,11 @@
+- name: Install Python build dependencies
+  ansible.builtin.dnf:
+    name:
+      - gcc
+      - python3-devel
+      - make
+    state: present
+
 - name: Install Python 3 and pip
   ansible.builtin.dnf:
     name: "{{ python_package }}"
