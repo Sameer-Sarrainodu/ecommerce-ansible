@@ -87,19 +87,19 @@ pipeline {
                         # -var-file=variables.pkrvars.hcl \
                         # .
 
-                        /usr/bin/packer build -force \
-                        -only=azure-arm.payment \
-                        -var-file=variables.pkrvars.hcl \
-                        .
+                        # /usr/bin/packer build -force \
+                        # -only=azure-arm.payment \
+                        # -var-file=variables.pkrvars.hcl \
+                        # .
 
-                        /usr/bin/packer build -force \
-                        -only=azure-arm.dispatch \
-                        -var-file=variables.pkrvars.hcl \
-                        .
+                        # /usr/bin/packer build -force \
+                        # -only=azure-arm.dispatch \
+                        # -var-file=variables.pkrvars.hcl \
+                        # .
 
-                        /usr/bin/packer build -force \
-                        -only=azure-arm.frontend \
-                        -var-file=variables.pkrvars.hcl \
+                         /usr/bin/packer build -force \
+                         -only=azure-arm.frontend \
+                         -var-file=variables.pkrvars.hcl \
                         .
                     '''
                 }
