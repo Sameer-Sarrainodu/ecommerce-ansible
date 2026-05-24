@@ -1,6 +1,6 @@
 - name: Install MongoDB repository
   ansible.builtin.copy:
-    src: mongo.repo
+    src:  "{{ playbook_dir }}/../roles/catalogue/files/mongo.repo"
     dest: /etc/yum.repos.d/mongo.repo
     mode: '0644'
 
