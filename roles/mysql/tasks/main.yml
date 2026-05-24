@@ -21,15 +21,30 @@
 
 - name: Set MySQL root password
   ansible.builtin.shell: |
-    mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+    mysql <<EOF
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';
+    FLUSH PRIVILEGES;
+    EOF
   register: mysql_password_reset
   failed_when: false
-  changed_when: "'ERROR' not in mysql_password_reset.stderr"
+  changed_when: false
 
 - name: Allow remote MySQL connections
-  ansible.builtin.replace:
+  ansible.builtin.lineinfile:
     path: "{{ mysql_config_file }}"
-    regexp: '127.0.0.1'
-    replace: '0.0.0.0'
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
   notify: restart mysql
-  ignore_errors: true
+
+- name: Restart MySQL after bind-address change
+  ansible.builtin.meta: flush_handlers
+
+- name: Create remote root MySQL user
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: root
+    host: "%"
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL,GRANT"
+    state: present

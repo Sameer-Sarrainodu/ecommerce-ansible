@@ -40,7 +40,7 @@
   when:
     - mysql_schema_check.rc != 0
 
-- name: Restart shipping
+- name: Restart shipping service
   ansible.builtin.systemd:
     name: shipping
     state: restarted

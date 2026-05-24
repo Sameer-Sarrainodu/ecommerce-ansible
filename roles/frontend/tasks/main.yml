@@ -37,6 +37,12 @@
     dest: /etc/nginx/default.d/roboshop.conf
     mode: '0644'
 
+- name: Allow nginx network connections via SELinux
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+
 - name: Enable Nginx service
   ansible.builtin.service:
     name: "{{ nginx_service }}"
