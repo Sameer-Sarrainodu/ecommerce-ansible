@@ -1,0 +1,5 @@
+- name: Load Shipping Schema
+  hosts: shipping
+
+  roles:
+    - shipping-schema

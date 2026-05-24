@@ -3,7 +3,7 @@ Description=Shipping Service
 
 [Service]
 User={{ app_user }}
-Environment=CART_ENDPOINT=cart.roboshop.internal:8080
+Environment=CART_ENDPOINT=cart.backend.sharkdev.shop:80
 Environment=DB_HOST=mysql.roboshop.internal
 ExecStart=/bin/java -jar {{ app_home }}/{{ app_jar }}
 SyslogIdentifier=shipping

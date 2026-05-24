@@ -1,0 +1,3 @@
+- import_playbook: catalogue-schema.yml
+
+- import_playbook: shipping-schema.yml

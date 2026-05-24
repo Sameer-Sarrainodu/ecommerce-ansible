@@ -1,0 +1,46 @@
+- name: Install MySQL client
+  ansible.builtin.dnf:
+    name: mysql
+    state: present
+
+- name: Check if cities schema already loaded
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    -e "use cities"
+  register: mysql_schema_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Load MySQL schema
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    < /app/db/schema.sql
+  when:
+    - mysql_schema_check.rc != 0
+
+- name: Load shipping app user
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    < /app/db/app-user.sql
+  when:
+    - mysql_schema_check.rc != 0
+
+- name: Load shipping master data
+  ansible.builtin.shell: >
+    mysql -h mysql.roboshop.internal
+    -uroot
+    -p{{ mysql_root_password }}
+    < /app/db/master-data.sql
+  when:
+    - mysql_schema_check.rc != 0
+
+- name: Restart shipping
+  ansible.builtin.systemd:
+    name: shipping
+    state: restarted

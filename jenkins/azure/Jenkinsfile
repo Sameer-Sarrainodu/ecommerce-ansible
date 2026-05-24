@@ -53,58 +53,70 @@ pipeline {
         //     }
         // }
 
-        stage('Build Service Images') {
+        // stage('Build Service Images') {
 
-            steps {
+        //     steps {
 
-                dir('packer') {
+        //         dir('packer') {
 
-                    sh '''
+        //             sh '''
 
-                        set -euxo pipefail
+        //                 set -euxo pipefail
 
-                        ls -l
+        //                 ls -l
 
-                        /usr/bin/packer init .
+        //                 /usr/bin/packer init .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.catalogue \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.catalogue \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.user \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.user \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.cart \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.cart \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.shipping \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.shipping \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.payment \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.payment \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                        # /usr/bin/packer build -force \
-                        # -only=azure-arm.dispatch \
-                        # -var-file=variables.pkrvars.hcl \
-                        # .
+        //                 # /usr/bin/packer build -force \
+        //                 # -only=azure-arm.dispatch \
+        //                 # -var-file=variables.pkrvars.hcl \
+        //                 # .
 
-                         # /usr/bin/packer build -force \
-                         # -only=azure-arm.frontend \
-                         # -var-file=variables.pkrvars.hcl \
-                        # .
-                    '''
-                }
-            }
-        }
+        //                  # /usr/bin/packer build -force \
+        //                  # -only=azure-arm.frontend \
+        //                  # -var-file=variables.pkrvars.hcl \
+        //                 # .
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage('Post Deploy Configuration') {
+
+        //     steps {
+
+        //         sh '''
+        //             ansible-playbook \
+        //             -i inventories/dev/hosts.ini \
+        //             playbooks/post-deploy.yml
+        //         '''
+        //     }
+        // }
+
     }
 
     post {

@@ -6,4 +6,4 @@ rabbitmq_port: 5672
 
 rabbitmq_user: roboshop
 
-rabbitmq_password: roboShop@123
+rabbitmq_password: roboshop@123

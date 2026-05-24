@@ -4,8 +4,8 @@ Description=Cart Service
 [Service]
 User={{ app_user }}
 Environment=REDIS_HOST=redis.roboshop.internal
-Environment=CATALOGUE_HOST=catalogue.roboshop.internal
-Environment=CATALOGUE_PORT=8080
+Environment=CATALOGUE_HOST=catalogue.backend.sharkdev.shop
+Environment=CATALOGUE_PORT=80
 ExecStart=/bin/node /app/server.js
 SyslogIdentifier=cart
 

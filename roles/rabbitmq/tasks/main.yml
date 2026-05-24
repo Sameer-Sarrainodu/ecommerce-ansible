@@ -1,13 +1,25 @@
+- name: Disable firewalld
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: firewalld
+
 - name: Copy RabbitMQ repository file
   ansible.builtin.copy:
     src: rabbitmq.repo
     dest: /etc/yum.repos.d/rabbitmq.repo
     mode: '0644'
 
+- name: Clean DNF cache
+  ansible.builtin.command:
+    cmd: dnf clean all
+
 - name: Install RabbitMQ server
   ansible.builtin.dnf:
-    name: "{{ rabbitmq_package }}"
+    name:
+      - erlang
+      - rabbitmq-server
     state: present
+    update_cache: true
 
 - name: Enable RabbitMQ service
   ansible.builtin.service:

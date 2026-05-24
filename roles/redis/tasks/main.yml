@@ -1,3 +1,8 @@
+- name: Disable firewalld
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: firewalld
+
 - name: Install Redis
   ansible.builtin.dnf:
     name: "{{ redis_package }}"
