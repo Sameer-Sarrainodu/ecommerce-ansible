@@ -21,7 +21,7 @@
     purge_cache: true
 
 - name: Enable and start RabbitMQ service
-  ansible.builtin.systemctl:
+  ansible.builtin.systemd:
     name: "{{ rabbitmq_service }}"
     enabled: true
     state: started
