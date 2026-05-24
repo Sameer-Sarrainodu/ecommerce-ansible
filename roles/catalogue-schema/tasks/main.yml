@@ -21,7 +21,7 @@
 - name: Load catalogue schema
   ansible.builtin.shell: >
     mongosh --host mongodb.roboshop.internal
-    < {{ app_home }}/db/{{ schema_file }}
+    < {{ app_home }}/db/master-data.js
   when:
     - mongo_schema_check.stdout | int < 0
 
