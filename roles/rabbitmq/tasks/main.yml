@@ -7,21 +7,19 @@
   ansible.builtin.copy:
     src: rabbitmq.repo
     dest: /etc/yum.repos.d/rabbitmq.repo
-    owner: root
-    group: root
     mode: '0644'
 
-- name: Install latest Erlang and RabbitMQ server
-  ansible.builtin.dnf:
-    name:
-      - erlang
-      - rabbitmq-server
-    state: latest
-    update_cache: true
-    purge_cache: true
+- name: Clean DNF cache
+  ansible.builtin.command:
+    cmd: dnf clean all
 
-- name: Enable and start RabbitMQ service
-  ansible.builtin.systemd:
+- name: install rabbitmq-server
+  ansible.builtin.dnf:
+    name: rabbitmq-server
+    state: installed
+
+- name: Enable RabbitMQ service
+  ansible.builtin.service:
     name: "{{ rabbitmq_service }}"
     enabled: true
     state: started
