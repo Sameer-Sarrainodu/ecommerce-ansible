@@ -37,7 +37,7 @@ pipeline {
                 sh '''
                     ansible-playbook \
                       -i inventories/dev/hosts.ini \
-                      playbooks/site.yml
+                      playbooks/post-deploy.yml
                 '''
             }
         }
